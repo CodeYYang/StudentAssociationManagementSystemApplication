@@ -1,4 +1,4 @@
-package cn.edu.zucc.generation;
+package cn.edu.zucc;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -55,6 +55,8 @@ public class CodeGeneration {
         strategyConfig.setInclude("fruit");
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
+        //忽略表中前缀
+        strategyConfig.setTablePrefix("tb_");
         strategyConfig.setEntityLombokModel(true);
         strategyConfig.setRestControllerStyle(true);
         autoGenerator.setStrategy(strategyConfig);

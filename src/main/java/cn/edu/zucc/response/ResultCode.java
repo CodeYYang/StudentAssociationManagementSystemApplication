@@ -1,8 +1,6 @@
 package cn.edu.zucc.response;
 
 /**
- * @Author: NieChangan
- * @Description: 返回码定义
  * 规定:
  * #200表示成功
  * #1001～1999 区间表示参数错误

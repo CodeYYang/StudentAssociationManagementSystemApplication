@@ -25,7 +25,7 @@ public class SwaggerConfiguration {
                 .apiInfo(apiInfo())
                 .select()
                 //这里一定要标注你控制器的位置
-                .apis(RequestHandlerSelectors.basePackage("com.xiaoge.system.controller"))
+                .apis(RequestHandlerSelectors.basePackage("cn.edu.zucc.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -34,8 +34,8 @@ public class SwaggerConfiguration {
         return new ApiInfoBuilder()
                 .title("学生社团管理系统API文档")
                 .description("学生社团管理系统API文档")
-                .termsOfServiceUrl("https://angegit.gitee.io/myblog/")
-                .contact(new Contact("王杨凯","https://angegit.gitee.io/myblog/","1351261434@qq.com"))
+                .termsOfServiceUrl("https://github.com/13588386674/StudentAssociationManagementSystemApplication")
+                .contact("1592980573@qq.com")
                 .version("1.0")
                 .build();
     }

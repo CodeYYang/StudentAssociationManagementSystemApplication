@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author wangyangkai
- * @since 2021-05-20
+ * @since 2021-05-21
  */
 public interface FruitMapper extends BaseMapper<Fruit> {
 

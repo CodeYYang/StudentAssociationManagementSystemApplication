@@ -52,7 +52,7 @@ public class CodeGeneration {
 
         //策略配置
         StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig.setInclude("fruit");
+        strategyConfig.setInclude("customer");
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
         //忽略表中前缀

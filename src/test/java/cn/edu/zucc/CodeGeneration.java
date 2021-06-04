@@ -22,7 +22,7 @@ public class CodeGeneration {
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
         dataSourceConfig.setUsername("root");
         dataSourceConfig.setPassword("123456");
-        dataSourceConfig.setUrl("jdbc:mysql://localhost:3306/test11");
+        dataSourceConfig.setUrl("jdbc:mysql://1.117.153.199:3306/StudentAssociations");
         autoGenerator.setDataSource(dataSourceConfig);
 
         //全局配置
@@ -52,11 +52,11 @@ public class CodeGeneration {
 
         //策略配置
         StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig.setInclude("customer");
+        strategyConfig.setInclude("activity","association","notice","user","user_activity","user_association");
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
         //忽略表中前缀
-        strategyConfig.setTablePrefix("tb_");
+        //strategyConfig.setTablePrefix("tb_");
         strategyConfig.setEntityLombokModel(true);
         strategyConfig.setRestControllerStyle(true);
         autoGenerator.setStrategy(strategyConfig);

@@ -1,13 +1,14 @@
-package cn.edu.zucc.handle;
+package cn.edu.zucc.utils;
+
+/**
+ * 业务Exception
+ */
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author NieChangan
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,5 +18,6 @@ public class BusinessException extends RuntimeException{
     private Integer code;
 
     @ApiModelProperty(value = "错误信息")
-    private String errMsg;
+    private String errorMsg;
+
 }

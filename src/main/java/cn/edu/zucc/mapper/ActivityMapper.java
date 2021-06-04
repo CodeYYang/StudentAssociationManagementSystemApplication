@@ -1,6 +1,6 @@
 package cn.edu.zucc.mapper;
 
-import cn.edu.zucc.entity.Fruit;
+import cn.edu.zucc.entity.Activity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author wangyangkai
- * @since 2021-05-21
+ * @since 2021-06-04
  */
-public interface FruitMapper extends BaseMapper<Fruit> {
+public interface ActivityMapper extends BaseMapper<Activity> {
 
 }

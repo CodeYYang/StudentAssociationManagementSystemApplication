@@ -2,6 +2,7 @@ package cn.edu.zucc.service;
 
 import cn.edu.zucc.entity.Association;
 import cn.edu.zucc.entity.vo.AssociationExt;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -27,5 +28,5 @@ public interface AssociationService extends IService<Association> {
      * @param assId
      * @return
      */
-    List<AssociationExt> GetAllAssociationMember(String assId);
+    Page<AssociationExt> GetAllAssociationMember(Integer current, Integer size, String assId);
 }

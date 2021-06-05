@@ -8,7 +8,7 @@
     -->
     <select id="GetAllAssociationMember" resultType="cn.edu.zucc.entity.vo.AssociationExt">
         select user_name,user_phone,user_ass_role,user_ass_status
-        from user ,user_association
+        from user,user_association
         where user.user_id = user_association.user_id and ass_id = ${assId}
     </select>
 </mapper>

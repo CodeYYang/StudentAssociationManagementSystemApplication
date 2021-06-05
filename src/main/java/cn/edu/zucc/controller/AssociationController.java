@@ -152,10 +152,9 @@ public class AssociationController {
             return Result.error().data("提示","该社团不存在");
         }
         else{
-            Page<AssociationExt> page = new Page<>(current,size);
-            Page<AssociationExt> associationPage = associationExtService.page(page);
-            long total = associationPage.getTotal();
-            List<AssociationExt> records = associationPage.getRecords();
+            Page<AssociationExt> page = associationService.GetAllAssociationMember(current, size, assId);
+            long total = page.getTotal();
+            List<AssociationExt> records = page.getRecords();
             return Result.ok().data("total",total).data("records",records);
         }
 

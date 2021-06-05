@@ -1,7 +1,10 @@
 package cn.edu.zucc.service;
 
 import cn.edu.zucc.entity.UserAssociation;
+import cn.edu.zucc.entity.vo.AssociationExt;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -44,4 +47,6 @@ public interface UserAssociationService extends IService<UserAssociation> {
      * @return
      */
     UserAssociation searchUserAssociation(String assId,String userID);
+
+
 }

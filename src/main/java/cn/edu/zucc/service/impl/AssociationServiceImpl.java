@@ -7,6 +7,8 @@ import cn.edu.zucc.mapper.AssociationMapper;
 import cn.edu.zucc.mapper.UserMapper;
 import cn.edu.zucc.service.AssociationService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,12 @@ public class AssociationServiceImpl extends ServiceImpl<AssociationMapper, Assoc
 
     @Resource
     private AssociationMapper associationMapper;
+
+    /**
+     * 根据社团名称查询社团
+     * @param assName
+     * @return
+     */
     @Override
     public Association getAssociationByName(String assName) {
         QueryWrapper queryWrapper = new QueryWrapper();
@@ -35,8 +43,21 @@ public class AssociationServiceImpl extends ServiceImpl<AssociationMapper, Assoc
         return associationMapper.selectOne(queryWrapper);
     }
 
+
+    /**
+     * 查询所有的社团成员
+     * @param assId
+     * @return
+     */
     @Override
-    public List<AssociationExt> GetAllAssociationMember(String assId) {
-        return associationMapper.GetAllAssociationMember(assId);
+    public Page<AssociationExt> GetAllAssociationMember(Integer current, Integer size, String assId) {
+        Page<AssociationExt> page = new Page<>(current,size);
+        List<AssociationExt> list = this.baseMapper.GetAllAssociationMember(page,assId);
+        page.setRecords(list);
+        return page;
     }
+
+
+
+
 }

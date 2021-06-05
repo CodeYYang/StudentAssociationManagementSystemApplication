@@ -2,4 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.zucc.mapper.AssociationMapper">
 
+<!--
+    查询所有社团成员
+    GetAllAssociationMember
+    -->
+    <select id="GetAllAssociationMember" resultType="cn.edu.zucc.entity.vo.AssociationExt">
+        select user_name,user_phone,user_ass_role,user_ass_status
+        from user ,user_association
+        where user.user_id = user_association.user_id and ass_id = ${assId}
+    </select>
 </mapper>

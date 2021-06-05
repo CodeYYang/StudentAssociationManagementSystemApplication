@@ -60,24 +60,25 @@ public class UserController {
     }
 
     /**
-     * 普通用户注册
+     * 用户注册
      * @param phone
      * @param password
      * @param userName
      * @return
      */
     @GetMapping("/register")
-    @ApiOperation(value = "普通用户注册",notes = "普通用户注册")
+    @ApiOperation(value = "用户注册",notes = "用户注册")
     public Result userRegister(@RequestParam("phone")String phone,
                                @RequestParam("password") String password,
-                               @RequestParam("userName") String userName){
+                               @RequestParam("userName") String userName,
+                               @RequestParam("userRole") String userRole){
         User user = new User();
         user.setUserCredit(new BigDecimal(0));
         user.setUserName(userName);
         user.setUserPhone(phone);
         user.setUserPwd(password);
         user.setUserCreateTime(new Date());
-        user.setUserRole("普通用户");
+        user.setUserRole(userRole);
         User user1 = userService.getUserByPhone(phone);
         if(user1 != null){
             return Result.error().data("提示","该手机号码已存在");

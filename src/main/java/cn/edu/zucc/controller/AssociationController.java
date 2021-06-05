@@ -4,18 +4,17 @@ package cn.edu.zucc.controller;
 import cn.edu.zucc.entity.Association;
 import cn.edu.zucc.entity.UserActivity;
 import cn.edu.zucc.entity.UserAssociation;
+import cn.edu.zucc.entity.vo.AssociationExt;
 import cn.edu.zucc.response.Result;
+import cn.edu.zucc.service.AssociationExtService;
 import cn.edu.zucc.service.AssociationService;
 import cn.edu.zucc.service.UserAssociationService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -38,6 +37,8 @@ public class AssociationController {
     private AssociationService associationService;
     @Resource
     private UserAssociationService userAssociationService;
+    @Resource
+    private AssociationExtService associationExtService;
     /**
      * 添加社团
      * @param assName
@@ -52,7 +53,7 @@ public class AssociationController {
         Association association = new Association();
         association.setAssBrief(assBrief);
         association.setAssName(assName);
-        association.setAssTotal(0);
+        association.setAssTotal(1);
         association.setAssCreateTime(new Date());
         association.setAssStatus("待审核");
         if(associationService.getAssociationByName(assName) == null) {
@@ -69,14 +70,20 @@ public class AssociationController {
     }
 
     /**
-     * 查看所有社团
+     * 分页查询社团列表
+     * @param current
+     * @param size
      * @return
      */
     @GetMapping("/list")
     @ApiOperation(value = "社团列表",notes = "查看所有社团")
-    public Result associationList(){
-        List<Association> associationList = associationService.list();
-        return Result.ok().data("allAssociation",associationList);
+    public Result associationList(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                  @RequestParam(required = true,defaultValue = "8") Integer size){
+        Page<Association> page = new Page<>(current,size);
+        Page<Association> associationPage = associationService.page(page);
+        long total = associationPage.getTotal();
+        List<Association> records = associationPage.getRecords();
+        return Result.ok().data("total",total).data("records",records);
     }
 
     /**
@@ -115,14 +122,43 @@ public class AssociationController {
             return Result.ok().data("提示","修改成功，原社长已成为普通成员");
         }
     }
+
+    /**
+     * 社团停止
+     * @param assId
+     * @return
+     */
     @GetMapping("/RemoveAssociation")
     @ApiOperation(value = "社团停止",notes = "删除社团")
     public Result RemoverAssociation(@RequestParam("assId") String assId){
         if(associationService.removeById(assId)){
             return Result.ok().data("提示","社团停止成功");
         }else{
-            return Result.error().data("提示","社团停止失败");
+            return Result.error().data("提示","不存在该社团");
         }
+    }
+
+    /**
+     * 查看社团成员
+     * @param assId
+     * @return
+     */
+    @GetMapping("/GetAllAssociationMember")
+    @ApiOperation(value = "查看社团成员",notes = "查看社团成员")
+    public Result GetAllAssociationMember(@RequestParam("assId") String assId,
+                                          @RequestParam("current") Integer current,
+                                          @RequestParam("size") Integer size){
+        if (associationService.getById(assId) ==null){
+            return Result.error().data("提示","该社团不存在");
+        }
+        else{
+            Page<AssociationExt> page = new Page<>(current,size);
+            Page<AssociationExt> associationPage = associationExtService.page(page);
+            long total = associationPage.getTotal();
+            List<AssociationExt> records = associationPage.getRecords();
+            return Result.ok().data("total",total).data("records",records);
+        }
+
     }
 }
 

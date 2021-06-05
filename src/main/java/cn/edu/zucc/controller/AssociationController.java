@@ -146,8 +146,8 @@ public class AssociationController {
     @GetMapping("/GetAllAssociationMember")
     @ApiOperation(value = "查看社团成员",notes = "查看社团成员")
     public Result GetAllAssociationMember(@RequestParam("assId") String assId,
-                                          @RequestParam("current") Integer current,
-                                          @RequestParam("size") Integer size){
+                                          @RequestParam(required = true,defaultValue = "1") Integer current,
+                                          @RequestParam(required = true,defaultValue = "8") Integer size){
         if (associationService.getById(assId) ==null){
             return Result.error().data("提示","该社团不存在");
         }

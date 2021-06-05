@@ -13,4 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ActivityService extends IService<Activity> {
 
+    /**
+     * 根据活动名称发现活动
+     * @param activityName
+     * @return
+     */
+    Activity findActivityByName(String activityName);
 }

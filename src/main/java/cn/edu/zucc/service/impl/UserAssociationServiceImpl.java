@@ -51,7 +51,7 @@ public class UserAssociationServiceImpl extends ServiceImpl<UserAssociationMappe
         queryWrapper.eq("ass_id",assId);
         queryWrapper.eq("user_id",userId);
         UserAssociation userAssociation = new UserAssociation();
-        userAssociation.setUserAssRole("社长");
+        userAssociation.setUserAssRole(status);
         userAssociationMapper.update(userAssociation,queryWrapper);
     }
 

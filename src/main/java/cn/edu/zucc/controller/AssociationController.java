@@ -1,6 +1,7 @@
 package cn.edu.zucc.controller;
 
 
+import cn.edu.zucc.entity.Activity;
 import cn.edu.zucc.entity.Association;
 import cn.edu.zucc.entity.UserActivity;
 import cn.edu.zucc.entity.UserAssociation;
@@ -78,12 +79,21 @@ public class AssociationController {
     @GetMapping("/list")
     @ApiOperation(value = "社团列表",notes = "查看所有社团")
     public Result associationList(@RequestParam(required = true,defaultValue = "1") Integer current,
-                                  @RequestParam(required = true,defaultValue = "8") Integer size){
+                                  @RequestParam(required = true,defaultValue = "8") Integer size,
+                                  @RequestParam(required = true,defaultValue = "") String query){
         Page<Association> page = new Page<>(current,size);
-        Page<Association> associationPage = associationService.page(page);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.like("ass_name",query);
+        Page<Association> associationPage = associationService.page(page,queryWrapper);
         long total = associationPage.getTotal();
-        List<Association> records = associationPage.getRecords();
-        return Result.ok().data("total",total).data("records",records);
+
+        if(total != 0) {
+            List<Association> records = associationPage.getRecords();
+            return Result.ok().data("total",total).data("records",records);
+        }
+        else {
+            return Result.error().data("提示","社团不存在");
+        }
     }
 
     /**

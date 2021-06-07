@@ -7,6 +7,7 @@ import cn.edu.zucc.response.Result;
 import cn.edu.zucc.response.ResultCode;
 import cn.edu.zucc.service.UserService;
 import cn.edu.zucc.utils.BusinessException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.val;
@@ -87,6 +88,36 @@ public class UserController {
         }
         return Result.ok().data("user",userService.getUserByPhone(phone));
 
+    }
+
+    /**
+     * 用户修改
+     * @param phone
+     * @param password
+     * @param modifyPhone
+     * @param userName
+     * @return
+     */
+    @GetMapping("/modify")
+    @ApiOperation(value = "用户修改",notes = "用户修改")
+    public Result modifyUser(@RequestParam("phone")String phone,
+                             @RequestParam("password") String password,
+                             @RequestParam("modifyPhone") String modifyPhone,
+                             @RequestParam("userName") String userName)
+    {
+        if(userService.getUserByPhone(modifyPhone) == null){
+            User user = new User();
+            user.setUserPwd(password);
+            user.setUserName(userName);
+            user.setUserPhone(modifyPhone);
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("user_phone",phone);
+            userService.update(user,queryWrapper);
+            return Result.ok().data("modifyUser",userService.getUserByPhone(modifyPhone));
+        }
+        else {
+            return Result.error().data("提示","该手机号已存在");
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package cn.edu.zucc.controller;
 
 import cn.edu.zucc.response.Result;
 import cn.edu.zucc.service.NoticeService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("//notice")
+@Api(value = "系统通知模块",tags = "系统通知接口")
 public class NoticeController {
 
     @Resource

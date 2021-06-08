@@ -1,6 +1,7 @@
 package cn.edu.zucc.controller;
 
 
+import cn.edu.zucc.entity.vo.NoticeAssVo;
 import cn.edu.zucc.response.Result;
 import cn.edu.zucc.service.NoticeService;
 import io.swagger.annotations.Api;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -23,7 +26,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("//notice")
-@Api(value = "系统通知模块",tags = "系统通知接口")
+@Api(value = "系统公告模块",tags = "系统公告接口")
 public class NoticeController {
 
     @Resource
@@ -37,7 +40,13 @@ public class NoticeController {
     @GetMapping("/searchAllNotice")
     @ApiOperation(value = "查看所有公告",notes = "查看所有公告")
     public Result searchAllNotice(@RequestParam("assId") String assId){
-        return Result.ok().data("notices",noticeService.searchAllNotice(assId));
+        List<NoticeAssVo> noticeAssVos = noticeService.searchAllNotice(assId);
+        if (noticeAssVos.size() == 0){
+            return Result.error().data("提示","该社团不存在公告");
+        }
+        else {
+            return Result.ok().data("notices", noticeAssVos);
+        }
     }
 }
 

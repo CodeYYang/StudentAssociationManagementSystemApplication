@@ -2,10 +2,10 @@ package cn.edu.zucc.controller;
 
 
 import cn.edu.zucc.config.Token;
-import cn.edu.zucc.entity.User;
+import cn.edu.zucc.entity.*;
 import cn.edu.zucc.response.Result;
 import cn.edu.zucc.response.ResultCode;
-import cn.edu.zucc.service.UserService;
+import cn.edu.zucc.service.*;
 import cn.edu.zucc.utils.BusinessException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
@@ -34,6 +34,16 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private UserAssociationService userAssociationService;
+
+    @Resource
+    private AssociationService associationService;
+
+    @Resource
+    private UserActivityService userActivityService;
+    @Resource
+    private ActivityService activityService;
     /**
      * 通过手机和密码登录
      * @param phone
@@ -118,6 +128,74 @@ public class UserController {
         else {
             return Result.error().data("提示","该手机号已存在");
         }
+    }
+
+    /**
+     * 用户报名社团
+     * @param userId
+     * @param assId
+     * @return
+     */
+    @GetMapping("/registerAssociation")
+    @ApiOperation(value = "用户报名社团",notes = "用户报名社团")
+    public Result registerAssociation(@RequestParam("userId") String userId,
+                                      @RequestParam("assId") String assId){
+        UserAssociation userAssociation = new UserAssociation();
+        userAssociation.setUserId(Long.valueOf(userId));
+        userAssociation.setAssId(Long.valueOf(assId));
+        userAssociation.setUserAssRole("社员");
+        userAssociation.setUserAssStatus("待审核");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("ass_id",assId);
+        queryWrapper.eq("user_id",userId);
+        UserAssociation one = userAssociationService.getOne(queryWrapper);
+        if( one != null){
+            if(one.getUserAssStatus().equals("待审核")||one.getUserAssStatus().equals("审核中"))
+                return Result.error().data("提示","您已提交加入社团申请，等待审核中");
+            else
+                return Result.error().data("提示","您已是该社团成员，请勿重复申请");
+        }
+        userAssociationService.save(userAssociation);
+        //Association associationServiceById = associationService.getById(assId);
+        //associationServiceById.setAssTotal(associationServiceById.getAssTotal()+1);
+        //associationService.updateById(associationServiceById);
+        return Result.ok().data("userAssociation",userAssociation);
+    }
+
+    /**
+     * 用户报名活动
+     * @param userId
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/registerActivity")
+    @ApiOperation(value = "用户报名活动",notes = "用户报名活动")
+    public Result registerActivity(@RequestParam("userId") String userId,
+                                      @RequestParam("activityId") String activityId){
+
+        UserActivity userActivity = new UserActivity();
+        userActivity.setUserId(Long.valueOf(userId));
+        userActivity.setActivityId(Long.valueOf(activityId));
+        userActivity.setUserActivityStatus("待审核");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("activity_id",activityId);
+        queryWrapper.eq("user_id",userId);
+        UserActivity one = userActivityService.getOne(queryWrapper);
+        if( one != null){
+            if(one.getUserActivityStatus().equals("待审核")||one.getUserActivityStatus().equals("审核中"))
+                return Result.error().data("提示","您已提交加入活动申请，等待审核中");
+            else
+                return Result.error().data("提示","您已加入该活动，请勿重复申请");
+        }
+        Activity activity = activityService.getById(activityId);
+        if(activity.getActivityPeople() == 0){
+            return Result.error().data("提示","活动人数已满");
+        }
+        else {
+            userActivityService.save(userActivity);
+            return Result.ok().data("UserActivity",userActivity);
+        }
+
     }
 }
 

@@ -9,6 +9,6 @@
         activity_leave,activity_status,activity_people,activity_credit,activity_score,
         activity_create_time,activity_sign_begin_time,activity_sign_end_time,activity_begin_time,activity_end_time
         from activity,association
-        where activity_name like "%"#{query}"%" and activity.ass_id = association.ass_id
+        where activity_name like "%"#{query}"%" and activity.ass_id = association.ass_id and activity_status = '审核通过'
     </select>
 </mapper>

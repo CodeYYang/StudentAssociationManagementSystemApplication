@@ -80,6 +80,7 @@ public class AssociationController {
         Page<Association> page = new Page<>(current,size);
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.like("ass_name",query);
+        queryWrapper.eq("ass_status","审核通过");
         Page<Association> associationPage = associationService.page(page,queryWrapper);
         long total = associationPage.getTotal();
 

@@ -1,7 +1,10 @@
 package cn.edu.zucc.mapper;
 
 import cn.edu.zucc.entity.Notice;
+import cn.edu.zucc.entity.vo.NoticeAssVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface NoticeMapper extends BaseMapper<Notice> {
 
+    /**
+     * 返回社团的所有公告
+     * @param assId
+     * @return
+     */
+    List<NoticeAssVo> searchAllNotice(String assId);
 }

@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.zucc.mapper.NoticeMapper">
 
+    <!--
+    查询公告，包含社团姓名
+    -->
+    <select id="searchAllNotice" resultType="cn.edu.zucc.entity.vo.NoticeAssVo">
+        select notice_id,association.ass_id,ass_name,
+        notice_name,notice_brief,notice_picture
+        from notice,association
+        where notice.ass_id = association.ass_id and notice.ass_id = #{assId}
+    </select>
+
+
 </mapper>

@@ -29,9 +29,11 @@ public class Activity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-      @TableId("activity_id")
-      private Long activityId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @TableId("activity_id")
+    private Long activityId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @TableField("ass_id")
     private Long assId;
 

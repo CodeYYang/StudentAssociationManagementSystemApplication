@@ -3,6 +3,7 @@ package cn.edu.zucc.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,8 +27,9 @@ public class Association implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-      @TableId("ass_id")
-      private Long assId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @TableId("ass_id")
+    private Long assId;
 
     @TableField("ass_name")
     private String assName;

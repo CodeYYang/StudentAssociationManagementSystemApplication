@@ -3,6 +3,8 @@ package cn.edu.zucc.controller;
 
 import cn.edu.zucc.entity.Activity;
 import cn.edu.zucc.entity.Association;
+import cn.edu.zucc.entity.vo.ActivityAssociationVo;
+import cn.edu.zucc.entity.vo.AssociationExt;
 import cn.edu.zucc.response.Result;
 import cn.edu.zucc.service.ActivityService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -109,18 +111,10 @@ public class ActivityController {
     public Result searchAllActivity(@RequestParam(required = true,defaultValue = "1") Integer current,
                                     @RequestParam(required = true,defaultValue = "8") Integer size,
                                     @RequestParam(required = true,defaultValue = "") String query){
-        Page<Activity> page = new Page<>(current,size);
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.like("activity_name",query);
-        Page<Activity> activityPage = activityService.page(page,queryWrapper);
-        long total = activityPage.getTotal();
-        if(total != 0) {
-            List<Activity> records = activityPage.getRecords();
-            return Result.ok().data("total", total).data("records", records);
-        }
-        else {
-            return Result.error().data("提示","活动不存在");
-        }
+        Page<ActivityAssociationVo> page = activityService.GetAllActivity(current,size,query);
+        long total = page.getTotal();
+        List<ActivityAssociationVo> records = page.getRecords();
+        return Result.ok().data("total",total).data("records",records);
     }
 
 }

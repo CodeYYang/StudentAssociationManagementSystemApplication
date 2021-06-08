@@ -2,4 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.zucc.mapper.ActivityMapper">
 
+    <!--模糊查询所有活动，并且显示社团名称
+    -->
+    <select id="GetAllAssociationMember" resultType="cn.edu.zucc.entity.vo.ActivityAssociationVo">
+        select activity.activity_id,ass_id,activity_name,activity_brief,activity_type,
+        activity_leave,activity_status,activity_people,activity_credit,activity_score,
+        activity_create_time,activity_sign_begin_time,activity_sign_end_time,activity_begin_time,activity_end_time
+        from activity,association
+        where activity_name like '%'+#{query}+'%'
+    </select>
 </mapper>

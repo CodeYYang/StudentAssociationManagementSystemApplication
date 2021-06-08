@@ -1,20 +1,17 @@
 package cn.edu.zucc.controller;
 
 
-import cn.edu.zucc.entity.Activity;
 import cn.edu.zucc.entity.Association;
 import cn.edu.zucc.entity.UserActivity;
 import cn.edu.zucc.entity.UserAssociation;
 import cn.edu.zucc.entity.vo.AssociationExt;
 import cn.edu.zucc.response.Result;
-import cn.edu.zucc.service.AssociationExtService;
 import cn.edu.zucc.service.AssociationService;
 import cn.edu.zucc.service.UserAssociationService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -38,8 +35,7 @@ public class AssociationController {
     private AssociationService associationService;
     @Resource
     private UserAssociationService userAssociationService;
-    @Resource
-    private AssociationExtService associationExtService;
+
     /**
      * 添加社团
      * @param assName

@@ -2,4 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.zucc.mapper.UserMapper">
 
+    <!--
+    查看用户加入逇社团信息
+    -->
+    <select id="searchMyAssociation" resultType="cn.edu.zucc.entity.vo.AssociationUser">
+        select a.ass_id,ass_name,ass_brief,ass_total,
+        ass_status,ass_create_time,
+        user_ass_role,user_ass_status
+        from association a,user_association b,user
+        where b.user_id = user.user_id
+        and a.ass_id = b.ass_id
+        and  user.user_id = #{userId}
+        and ass_name like "%"#{query}"%"
+    </select>
+    <!--
+    查看用户加入的活动信息
+    -->
+    <select id="searchMyActivity" resultType="cn.edu.zucc.entity.vo.ActivityUser">
+        select b.activity_id,b.activity_name,b.activity_brief,b.activity_type,
+        activity_leave,activity_status,activity_people,activity_credit,	activity_score,
+        activity_create_time,activity_sign_begin_time,activity_sign_end_time,activity_begin_time
+        activity_end_time,b.ass_id,c.ass_name,user_activity_status
+        from user_activity a,activity b,association c
+        where a.user_id = #{userId} AND a.activity_id = b.activity_id
+        AND b.ass_id = c.ass_id AND b.activity_name like "%"#{query}"%"
+    </select>
+
 </mapper>

@@ -3,11 +3,16 @@ package cn.edu.zucc.controller;
 
 import cn.edu.zucc.config.Token;
 import cn.edu.zucc.entity.*;
+import cn.edu.zucc.entity.vo.ActivityUser;
+import cn.edu.zucc.entity.vo.AssociationExt;
+import cn.edu.zucc.entity.vo.AssociationUser;
 import cn.edu.zucc.response.Result;
 import cn.edu.zucc.response.ResultCode;
 import cn.edu.zucc.service.*;
 import cn.edu.zucc.utils.BusinessException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.val;
@@ -17,6 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -197,5 +203,108 @@ public class UserController {
         }
 
     }
+
+    /**
+     * 用户查看已经加入的社团
+     * @param current
+     * @param size
+     * @param query
+     * @param userId
+     * @return
+     */
+    @GetMapping("/searchMyAssociation")
+    @ApiOperation(value = "用户查看已经加入的社团",notes = "用户查看已经加入的社团")
+    public Result searchMyAssociation(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                      @RequestParam(required = true,defaultValue = "8") Integer size,
+                                      @RequestParam(required = true,defaultValue = "") String query,
+                                      @RequestParam("userId") String userId
+                                      )
+    {
+
+        IPage<AssociationUser> iPage = userService.searchMyAssociation(current, size, query, userId);
+        long total = iPage.getTotal();
+        List<AssociationUser> records = iPage.getRecords();
+        if(total == 0){
+            return Result.error().data("提示","未加入任何社团");
+        }else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+    /**
+     * 用户查看已经加入的活动
+     * @param current
+     * @param size
+     * @param query
+     * @param userId
+     * @return
+     */
+    @GetMapping("/searchMyActivity")
+    @ApiOperation(value = "用户查看已经加入的活动",notes = "用户查看已经加入的活动")
+    public Result searchMyActivity(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                      @RequestParam(required = true,defaultValue = "8") Integer size,
+                                      @RequestParam(required = true,defaultValue = "") String query,
+                                      @RequestParam("userId") String userId
+    )
+    {
+
+        IPage<ActivityUser> iPage = userService.searchMyActivity(current, size, query, userId);
+        long total = iPage.getTotal();
+        List<ActivityUser> records = iPage.getRecords();
+        if(total == 0){
+            return Result.error().data("提示","未加入任何活动");
+        }else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+
+    /**
+     * 用户退出已加入活动
+     * @param userId
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/quitActivity")
+    @ApiOperation(value = "用户退出已加入活动",notes = "用户退出已加入活动")
+    public Result quitActivity(@RequestParam("userId") String userId,
+                                  @RequestParam("activityId") String activityId){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("activity_id",activityId);
+        UserActivity userActivity = userActivityService.getOne(queryWrapper);
+        if(userActivity == null){
+            return Result.error().data("提示","您未加入此活动");
+        }else if (userActivity.getUserActivityStatus().equals("待审核")){
+            userActivityService.remove(queryWrapper);
+            return Result.ok().data("提示","取消加入活动申请成功");
+        }else {
+            userActivityService.remove(queryWrapper);
+            return Result.ok().data("提示","成功退出该活动");
+        }
+    }
+    /**
+     * 用户退出已加入社团
+     * @param userId
+     * @param assId
+     * @return
+     */
+    @GetMapping("/quitAssociation")
+    @ApiOperation(value = "用户退出已加入社团",notes = "用户退出已加入社团")
+    public Result quitAssociation(@RequestParam("userId") String userId,
+                                  @RequestParam("assId") String assId){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("ass_id",assId);
+        UserAssociation userAssociation = userAssociationService.getOne(queryWrapper);
+        if(userAssociation == null){
+            return Result.error().data("提示","您未加入此社团");
+        }else if (userAssociation.getUserAssStatus().equals("待审核")){
+            userAssociationService.remove(queryWrapper);
+            return Result.ok().data("提示","取消加入社团申请成功");
+        }else {
+            userAssociationService.remove(queryWrapper);
+            return Result.ok().data("提示","成功退出该社团");
+        }
+    }
+
 }
 

@@ -21,7 +21,7 @@
     <select id="searchMyActivity" resultType="cn.edu.zucc.entity.vo.ActivityUser">
         select b.activity_id,b.activity_name,b.activity_brief,b.activity_type,
         activity_leave,activity_status,activity_people,activity_credit,	activity_score,
-        activity_create_time,activity_sign_begin_time,activity_sign_end_time,activity_begin_time
+        activity_create_time,activity_sign_begin_time,activity_sign_end_time,activity_begin_time,
         activity_end_time,b.ass_id,c.ass_name,user_activity_status
         from user_activity a,activity b,association c
         where a.user_id = #{userId} AND a.activity_id = b.activity_id

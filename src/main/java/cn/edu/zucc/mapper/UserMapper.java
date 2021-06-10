@@ -1,5 +1,7 @@
 package cn.edu.zucc.mapper;
 
+import cn.edu.zucc.entity.Activity;
+import cn.edu.zucc.entity.Association;
 import cn.edu.zucc.entity.User;
 import cn.edu.zucc.entity.vo.ActivityUser;
 import cn.edu.zucc.entity.vo.AssociationExt;
@@ -36,4 +38,23 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     IPage<ActivityUser> searchMyActivity(Page<ActivityUser> page, String userId, String query);
+
+    /**
+     * 查看我管理的社团
+     * @param page
+     * @param userId
+     * @param query
+     * @return
+     */
+    IPage<Association> searchManagementAssociation(Page<Association> page, String userId, String query);
+
+    /**
+     * 查看我管理的社团成员
+     * @param page
+     * @param assId
+     * @param query
+     * @return
+     */
+    IPage<User> searchManagementAssociationMember(Page<User> page, String assId, String query);
+
 }

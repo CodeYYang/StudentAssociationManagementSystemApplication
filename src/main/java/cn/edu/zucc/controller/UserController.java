@@ -241,9 +241,9 @@ public class UserController {
     @GetMapping("/searchMyActivity")
     @ApiOperation(value = "用户查看已经加入的活动",notes = "用户查看已经加入的活动")
     public Result searchMyActivity(@RequestParam(required = true,defaultValue = "1") Integer current,
-                                      @RequestParam(required = true,defaultValue = "8") Integer size,
-                                      @RequestParam(required = true,defaultValue = "") String query,
-                                      @RequestParam("userId") String userId
+                                   @RequestParam(required = true,defaultValue = "8") Integer size,
+                                   @RequestParam(required = true,defaultValue = "") String query,
+                                   @RequestParam("userId") String userId
     )
     {
 
@@ -305,6 +305,48 @@ public class UserController {
             return Result.ok().data("提示","成功退出该社团");
         }
     }
+
+    /**
+     * 查看社长管理的社团
+     * @param current
+     * @param size
+     * @param query
+     * @param userId
+     * @return
+     */
+    @GetMapping("/searchManagementAssociation")
+    @ApiOperation(value = "查看社长管理的社团",notes = "查看社长管理的社团")
+    public Result searchManagementAssociation(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                              @RequestParam(required = true,defaultValue = "8") Integer size,
+                                              @RequestParam(required = true,defaultValue = "") String query,
+                                              @RequestParam("userId") String userId)
+    {
+        IPage<Association> iPage = userService.searchManagementAssociation(current, size, query, userId);
+        long total = iPage.getTotal();
+        List<Association> records = iPage.getRecords();
+        if(total == 0){
+            return Result.error().data("提示","您未管理任何社团");
+        }else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+    @GetMapping("/searchManagementAssociationMember")
+    @ApiOperation(value = "查看社长管理的社团成员",notes = "查看社长管理的社团成员")
+    public Result searchManagementAssociationMember(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                                    @RequestParam(required = true,defaultValue = "8") Integer size,
+                                                    @RequestParam(required = true,defaultValue = "") String query,
+                                                    @RequestParam("assId") String assId)
+    {
+        IPage<User> iPage = userService.searchManagementAssociationMember(current, size, query, assId);
+        long total = iPage.getTotal();
+        List<User> records = iPage.getRecords();
+        if(total == 0){
+            return Result.error().data("提示","该社团不存在成员");
+        }else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+
 
 }
 

@@ -28,4 +28,19 @@
         AND b.ass_id = c.ass_id AND b.activity_name like "%"#{query}"%"
     </select>
 
+    <select id="searchManagementAssociation" resultType="cn.edu.zucc.entity.Association">
+        select a.ass_id,ass_name,ass_brief,ass_total,ass_status,ass_create_time
+        from association a,user_association b
+        where a.ass_id = b.ass_id AND b.user_id = #{userId}
+        AND b.user_ass_role = '社长' And a.ass_name like "%"#{query}"%"
+    </select>
+
+    <select id="searchManagementAssociationMember" resultType="cn.edu.zucc.entity.User">
+        select a.user_id,user_name,user_pwd,user_phone,
+        user_credit,user_role,user_create_time
+        from user a,user_association b
+        where a.user_id = b.user_id AND b.ass_id = #{assId}
+        AND user_name like "%"#{query}"%" and user_ass_role != '社长'
+    </select>
+
 </mapper>

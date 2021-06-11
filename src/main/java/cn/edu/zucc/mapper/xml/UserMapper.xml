@@ -28,6 +28,9 @@
         AND b.ass_id = c.ass_id AND b.activity_name like "%"#{query}"%"
     </select>
 
+    <!--
+    查看我管理的社团
+    -->
     <select id="searchManagementAssociation" resultType="cn.edu.zucc.entity.Association">
         select a.ass_id,ass_name,ass_brief,ass_total,ass_status,ass_create_time
         from association a,user_association b
@@ -35,12 +38,25 @@
         AND b.user_ass_role = '社长' And a.ass_name like "%"#{query}"%"
     </select>
 
+    <!--
+    查看我管理的社团成员
+    -->
     <select id="searchManagementAssociationMember" resultType="cn.edu.zucc.entity.User">
         select a.user_id,user_name,user_pwd,user_phone,
         user_credit,user_role,user_create_time
         from user a,user_association b
         where a.user_id = b.user_id AND b.ass_id = #{assId}
         AND user_name like "%"#{query}"%" and user_ass_role != '社长'
+    </select>
+    <!--
+    查看固定社团待审核的社团成员
+    -->
+    <select id="searchAssMemberWaitStatus" resultType="cn.edu.zucc.entity.User">
+        select a.user_id,user_name,user_pwd,user_phone,
+        user_credit,user_role,user_create_time
+        from user a,user_association b
+        where a.user_id = b.user_id AND b.ass_id = #{assId}
+        AND user_name like "%"#{query}"%" and user_ass_status = '待审核'
     </select>
 
 </mapper>

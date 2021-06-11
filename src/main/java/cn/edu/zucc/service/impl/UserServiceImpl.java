@@ -93,10 +93,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return iPage;
     }
 
+    /**
+     * 查看我管理的社团成员
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
     @Override
     public IPage<User> searchManagementAssociationMember(Integer current, Integer size, String query, String assId) {
         Page<User> page = new Page<>(current,size);
         IPage<User> iPage = this.baseMapper.searchManagementAssociationMember(page,assId,query);
+        return iPage;
+    }
+
+    /**
+     * 查看指定社团待审核的社团成员
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
+    @Override
+    public IPage<User> searchAssMemberWaitStatus(Integer current, Integer size, String query, String assId) {
+        Page<User> page = new Page<>(current,size);
+        IPage<User> iPage = this.baseMapper.searchAssMemberWaitStatus(page,assId,query);
         return iPage;
     }
 

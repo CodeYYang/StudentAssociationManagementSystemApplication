@@ -271,7 +271,7 @@ public class UserController {
         queryWrapper.eq("user_id",userId);
         queryWrapper.eq("activity_id",activityId);
         UserActivity userActivity = userActivityService.getOne(queryWrapper);
-        if(userActivity == null){
+        if(userActivity == null || userActivity.getUserActivityStatus().equals("审核未通过")){
             return Result.error().data("提示","您未加入此活动");
         }else if (userActivity.getUserActivityStatus().equals("待审核")){
             userActivityService.remove(queryWrapper);
@@ -295,7 +295,7 @@ public class UserController {
         queryWrapper.eq("user_id",userId);
         queryWrapper.eq("ass_id",assId);
         UserAssociation userAssociation = userAssociationService.getOne(queryWrapper);
-        if(userAssociation == null){
+        if(userAssociation == null || userAssociation.getUserAssStatus().equals("审核未通过")){
             return Result.error().data("提示","您未加入此社团");
         }else if (userAssociation.getUserAssStatus().equals("待审核")){
             userAssociationService.remove(queryWrapper);
@@ -330,6 +330,15 @@ public class UserController {
             return Result.ok().data("total", total).data("records", records);
         }
     }
+
+    /**
+     * 查看社长管理的社团成员
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
     @GetMapping("/searchManagementAssociationMember")
     @ApiOperation(value = "查看社长管理的社团成员",notes = "查看社长管理的社团成员")
     public Result searchManagementAssociationMember(@RequestParam(required = true,defaultValue = "1") Integer current,
@@ -347,6 +356,102 @@ public class UserController {
         }
     }
 
+    /**
+     * 查看待审核的社团成员
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
+    @GetMapping("/searchAssMemberWaitStatue")
+    @ApiOperation(value = "查看待审核的社团成员",notes = "查看待审核的社团成员")
+    public Result searchAssMemberWaitStatue(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                            @RequestParam(required = true,defaultValue = "8") Integer size,
+                                            @RequestParam(required = true,defaultValue = "") String query,
+                                            @RequestParam("assId") String assId)
+    {
+
+        IPage<User> iPage = userService.searchAssMemberWaitStatus(current, size, query, assId);
+        long total = iPage.getTotal();
+        List<User> records = iPage.getRecords();
+        if(total == 0){
+            return Result.error().data("提示","该社团不存在待审核");
+        }else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+
+
+    /**
+     * 社长删除社团成员
+     * @param userId
+     * @param assId
+     * @return
+     */
+    @GetMapping("/deleteAssMember")
+    @ApiOperation(value = "社长删除社团成员",notes = "社长删除社团成员")
+    public Result deleteAssMember(@RequestParam("userId") String userId,
+                                  @RequestParam("assId") String assId){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("ass_id",assId);
+        UserAssociation userAssociation = userAssociationService.getOne(queryWrapper);
+        if(userAssociation == null){
+            return Result.error().data("提示","该社团成员不存在");
+        }else{
+            userAssociationService.remove(queryWrapper);
+            return Result.ok().data("提示","成功删除该成员");
+        }
+
+
+    }
+
+    /**
+     * 社长同意社团成员加入
+     * @param userId
+     * @param assId
+     * @return
+     */
+    @GetMapping("/agreeAssMember")
+    @ApiOperation(value = "社长同意社团成员加入",notes = "社长同意社团成员加入")
+    public Result agreeAssMember(@RequestParam("userId") String userId,
+                                  @RequestParam("assId") String assId){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("ass_id",assId);
+        UserAssociation userAssociation = userAssociationService.getOne(queryWrapper);
+        System.out.println(userAssociation.toString());
+        if(userAssociation.getUserAssStatus().equals("审核通过")){
+            return Result.error().data("提示","该成员已经是社团成员");
+        }else{
+            userAssociation.setUserAssStatus("审核通过");
+            userAssociationService.update(userAssociation,queryWrapper);
+            return Result.ok().data("提示","社长同意社团成员加入");
+        }
+    }
+    /**
+     * 社长不同意社团成员加入
+     * @param userId
+     * @param assId
+     * @return
+     */
+    @GetMapping("/disAgreeAssMember")
+    @ApiOperation(value = "社长不同意社团成员加入",notes = "社长不同意社团成员加入")
+    public Result disAgreeAssMember(@RequestParam("userId") String userId,
+                                 @RequestParam("assId") String assId){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("ass_id",assId);
+        UserAssociation userAssociation = userAssociationService.getOne(queryWrapper);
+        if(userAssociation.getUserAssStatus().equals("审核通过")){
+            return Result.error().data("提示","该成员已经是社团成员");
+        }else{
+            userAssociation.setUserAssStatus("审核未通过");
+            userAssociationService.update(userAssociation,queryWrapper);
+            return Result.ok().data("提示","社长不同意社团成员加入");
+        }
+    }
 
 }
 

@@ -57,4 +57,13 @@ public interface UserMapper extends BaseMapper<User> {
      */
     IPage<User> searchManagementAssociationMember(Page<User> page, String assId, String query);
 
+    /**
+     * 查看指定的社团待审核的成员
+     * @param page
+     * @param assId
+     * @param query
+     * @return
+     */
+    IPage<User> searchAssMemberWaitStatus(Page<User> page, String assId, String query);
+
 }

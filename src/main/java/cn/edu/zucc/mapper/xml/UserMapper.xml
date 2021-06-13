@@ -59,4 +59,16 @@
         AND user_name like "%"#{query}"%" and user_ass_status = '待审核'
     </select>
 
+    <!--
+    查看我管理的活动成员
+    -->
+    <select id="searchManagementActivityMember" resultType="cn.edu.zucc.entity.User">
+        select a.user_id,user_name,user_pwd,user_phone,
+        user_credit,user_role,user_create_time
+        from user a,user_activity b,user_association c
+        where a.user_id = b.user_id AND b.activity_id = #{activityId}
+        AND user_activity_status = '审核通过' AND a.user_id = c.user_id
+        AND user_name like "%"#{query}"%" and c.user_ass_role != '社长'
+    </select>
+
 </mapper>

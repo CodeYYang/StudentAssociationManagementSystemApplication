@@ -123,5 +123,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return iPage;
     }
 
+    /**
+     * 查看我管理的活动成员
+     * @param current
+     * @param size
+     * @param query
+     * @param activityId
+     * @return
+     */
+    @Override
+    public IPage<User> searchManagementActivityMember(Integer current, Integer size, String query, String activityId) {
+        Page<User> page = new Page<>(current,size);
+        IPage<User> iPage = this.baseMapper.searchManagementActivityMember(page,activityId,query);
+        return iPage;
+    }
+
 
 }

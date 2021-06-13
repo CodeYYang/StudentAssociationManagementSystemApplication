@@ -421,7 +421,6 @@ public class UserController {
         queryWrapper.eq("user_id",userId);
         queryWrapper.eq("ass_id",assId);
         UserAssociation userAssociation = userAssociationService.getOne(queryWrapper);
-        System.out.println(userAssociation.toString());
         if(userAssociation.getUserAssStatus().equals("审核通过")){
             return Result.error().data("提示","该成员已经是社团成员");
         }else{
@@ -450,6 +449,128 @@ public class UserController {
             userAssociation.setUserAssStatus("审核未通过");
             userAssociationService.update(userAssociation,queryWrapper);
             return Result.ok().data("提示","社长不同意社团成员加入");
+        }
+    }
+
+    /**
+     * 查看社长管理的活动
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
+    @GetMapping("/searchManagementActivity")
+    @ApiOperation(value = "查看管理的活动",notes = "查看管理的活动")
+    public Result searchManagementActivity(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                              @RequestParam(required = true,defaultValue = "8") Integer size,
+                                              @RequestParam(required = true,defaultValue = "") String query,
+                                              @RequestParam("assId") String assId)
+    {
+        Page<Activity> page = new Page<>(current,size);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.like("activity_name",query);
+        queryWrapper.eq("ass_id",assId);
+        queryWrapper.eq("activity_status","审核通过");
+        Page<Activity> activityPage = activityService.page(page,queryWrapper);
+        long total = activityPage.getTotal();
+        if(total != 0) {
+            List<Activity> records = activityPage.getRecords();
+            return Result.ok().data("total",total).data("records",records);
+        }
+        else {
+            return Result.error().data("提示","该社团不存在活动");
+        }
+    }
+
+    /**
+     * 查看社长管理的社团成员
+     * @param current
+     * @param size
+     * @param query
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/searchManagementActivityMember")
+    @ApiOperation(value = "查看社长管理的活动成员",notes = "查看社长管理的社团成员")
+    public Result searchManagementActivityMember(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                                    @RequestParam(required = true,defaultValue = "8") Integer size,
+                                                    @RequestParam(required = true,defaultValue = "") String query,
+                                                    @RequestParam("activityId") String activityId)
+    {
+        IPage<User> iPage = userService.searchManagementActivityMember(current, size, query, activityId);
+        long total = iPage.getTotal();
+        List<User> records = iPage.getRecords();
+        if(total == 0){
+            return Result.error().data("提示","该活动不存在成员");
+        }else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+    /**
+     * 社长删除活动成员
+     * @param userId
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/deleteActivityMember")
+    @ApiOperation(value = "社长删除活动成员",notes = "社长删除活动成员")
+    public Result deleteActivityMember(@RequestParam("userId") String userId,
+                                  @RequestParam("activityId") String activityId){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("activity_id",activityId);
+        UserActivity userActivity = userActivityService.getOne(queryWrapper);
+        if(userActivity == null){
+            return Result.error().data("提示","该活动成员不存在");
+        }else{
+            userActivityService.remove(queryWrapper);
+            return Result.ok().data("提示","成功删除该成员");
+        }
+    }
+
+    /**
+     * 社长同意活动成员加入
+     * @param userId
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/agreeActivityMember")
+    @ApiOperation(value = "社长同意活动成员加入",notes = "社长同意活动成员加入")
+    public Result agreeActivityMember(@RequestParam("userId") String userId,
+                                 @RequestParam("activityId") String activityId){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("activity_id",activityId);
+        UserActivity userActivity = userActivityService.getOne(queryWrapper);
+        if(userActivity.getUserActivityStatus().equals("审核通过")){
+            return Result.error().data("提示","该成员已经是活动成员");
+        }else{
+            userActivity.setUserActivityStatus("审核通过");
+            userActivityService.update(userActivity,queryWrapper);
+            return Result.ok().data("提示","社长同意活动成员加入");
+        }
+    }
+    /**
+     * 社长不同意活动成员加入
+     * @param userId
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/disAgreeActivityMember")
+    @ApiOperation(value = "社长不同意活动成员加入",notes = "社长不同意活动成员加入")
+    public Result activityId(@RequestParam("userId") String userId,
+                                    @RequestParam("activityId") String activityId){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("activity_id",activityId);
+        UserActivity userActivity = userActivityService.getOne(queryWrapper);
+        if(userActivity.getUserActivityStatus().equals("审核通过")){
+            return Result.error().data("提示","该成员已经是活动成员");
+        }else{
+            userActivity.setUserActivityStatus("审核未通过");
+            userActivityService.update(userActivity,queryWrapper);
+            return Result.ok().data("提示","社长不同意活动成员加入");
         }
     }
 

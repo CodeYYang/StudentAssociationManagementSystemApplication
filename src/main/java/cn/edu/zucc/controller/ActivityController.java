@@ -50,7 +50,7 @@ public class ActivityController {
      * @param activityCredit
      * @return
      */
-    @GetMapping("/add")
+    @GetMapping("/addActivity")
     @ApiOperation(value = "创建活动",notes = "创建活动")
     public Result addActivity(@RequestParam(value = "assId",defaultValue = "1") String assId,
                               @RequestParam("activityName") String activityName,
@@ -86,11 +86,27 @@ public class ActivityController {
         }
         else{
             activityService.save(activity);
-            Activity activityByName = activityService.findActivityByName(activityName);
-            return Result.ok().data("activity",activityByName);
+            return Result.ok().data("提示","活动创建成功");
         }
     }
 
+    /**
+     * 删除活动
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/deleteActivity")
+    @ApiOperation(value = "删除活动",notes = "删除活动")
+    public Result deleteActivity(@RequestParam("activityId") String activityId)
+    {
+        Activity activity = activityService.getById(activityId);
+        if(activity == null){
+            return Result.error().data("提示","不存在该活动");
+        }else {
+            activityService.removeById(activityId);
+            return Result.ok().data("提示","删除活动成功");
+        }
+    }
     /**
      * 查找活动信息
      * @param activityId
@@ -106,6 +122,14 @@ public class ActivityController {
             return Result.error().data("提示","活动不存在");
         }
     }
+
+    /**
+     * 查看所有活动内容
+     * @param current
+     * @param size
+     * @param query
+     * @return
+     */
     @GetMapping("/searchAllActivity")
     @ApiOperation(value = "查看所有活动内容",notes = "查看所有活动内容")
     public Result searchAllActivity(@RequestParam(required = true,defaultValue = "1") Integer current,

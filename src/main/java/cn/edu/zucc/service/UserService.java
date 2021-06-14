@@ -89,4 +89,15 @@ public interface UserService extends IService<User> {
      * @return
      */
     IPage<User> searchManagementActivityMember(Integer current, Integer size, String query, String activityId);
+
+
+    /**
+     * 查看指定活动待审核的成员
+     * @param current
+     * @param size
+     * @param query
+     * @param activityId
+     * @return
+     */
+    IPage<User> searchActivityMemberWaitStatus(Integer current, Integer size, String query, String activityId);
 }

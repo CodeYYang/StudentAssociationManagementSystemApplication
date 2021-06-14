@@ -12,16 +12,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.annotation.Resource;
 import javax.swing.*;
 import javax.xml.crypto.Data;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -60,10 +61,10 @@ public class ActivityController {
                               @RequestParam("activityLeave") boolean activityLeave,
                               @RequestParam("activityPeople")  Integer activityPeople,
                               @RequestParam("activityCredit") Integer activityCredit,
-                              @RequestParam("activitySignBeginTime") String activitySignBeginTime,
-                              @RequestParam("activitySignEndTime") String activitySignEndTime,
-                              @RequestParam("activityBeginTime") String activityBeginTime,
-                              @RequestParam("activityEndTime") String activityEndTime)
+                              @RequestParam("activitySignBeginTime") Date activitySignBeginTime,
+                              @RequestParam("activitySignEndTime") Date activitySignEndTime,
+                              @RequestParam("activityBeginTime") Date activityBeginTime,
+                              @RequestParam("activityEndTime") Date activityEndTime)
                               {
         System.out.println(activityBeginTime);
         Activity activity = new Activity();
@@ -75,11 +76,10 @@ public class ActivityController {
         activity.setActivityStatus("审批中");
         activity.setActivityPeople(activityPeople);
         activity.setActivityCredit(new BigDecimal(activityCredit));
-        activity.setActivityCreateTime(new Date());
-        activity.setActivitySignBeginTime(new Date(DealDateFormatUtil.dealDateToLong(activitySignBeginTime)));
-        activity.setActivitySignEndTime(new Date(DealDateFormatUtil.dealDateToLong(activitySignEndTime)));
-        activity.setActivityBeginTime(new Date(DealDateFormatUtil.dealDateToLong(activityBeginTime)));
-        activity.setActivityEndTime(new Date(DealDateFormatUtil.dealDateToLong(activityEndTime)));
+        activity.setActivityCreateTime(activitySignBeginTime);
+        activity.setActivitySignEndTime(activitySignEndTime);
+        activity.setActivityBeginTime(activityBeginTime);
+        activity.setActivityEndTime(activityEndTime);
         if(activityService.findActivityByName(activityName) != null)
         {
             return Result.error().data("提示","活动已存在");
@@ -141,5 +141,12 @@ public class ActivityController {
         return Result.ok().data("total",total).data("records",records);
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder, WebRequest request) {
+
+        //转换日期
+        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));// CustomDateEditor为自定义日期编辑器
+    }
 }
 

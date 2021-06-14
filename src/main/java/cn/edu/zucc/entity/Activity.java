@@ -61,24 +61,34 @@ public class Activity implements Serializable {
     @TableField("activity_score")
     private BigDecimal activityScore;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+
     @TableField("activity_create_time")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activityCreateTime;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+
     @TableField("activity_sign_begin_time")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activitySignBeginTime;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+
     @TableField("activity_sign_end_time")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activitySignEndTime;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+
     @TableField("activity_begin_time")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activityBeginTime;
 
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+
     @TableField("activity_end_time")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activityEndTime;
 
 

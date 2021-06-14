@@ -16,11 +16,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.val;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -578,5 +583,38 @@ public class UserController {
         }
     }
 
+    /**
+     * 查看待审核的活动成员
+     * @param current
+     * @param size
+     * @param query
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/searchActivityMemberWaitStatue")
+    @ApiOperation(value = "查看待审核的活动成员",notes = "查看待审核的活动成员")
+    public Result searchActivityMemberWaitStatue(@RequestParam(required = true,defaultValue = "1") Integer current,
+                                            @RequestParam(required = true,defaultValue = "8") Integer size,
+                                            @RequestParam(required = true,defaultValue = "") String query,
+                                            @RequestParam("activityId") String activityId)
+    {
+
+        IPage<User> iPage = userService.searchActivityMemberWaitStatus(current, size, query, activityId);
+        long total = iPage.getTotal();
+        List<User> records = iPage.getRecords();
+        if(total == 0){
+            return Result.error().data("提示","该活动不存在待审核");
+        }else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder, WebRequest request) {
+
+        //转换日期
+        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));// CustomDateEditor为自定义日期编辑器
+    }
 }
 

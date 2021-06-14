@@ -138,5 +138,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return iPage;
     }
 
+    /**
+     * 查看指定活动待审核的成员
+     * @param current
+     * @param size
+     * @param query
+     * @param activityId
+     * @return
+     */
+    @Override
+    public IPage<User> searchActivityMemberWaitStatus(Integer current, Integer size, String query, String activityId) {
+        Page<User> page = new Page<>(current,size);
+        IPage<User> iPage = this.baseMapper.searchActivityMemberWaitStatus(page,activityId,query);
+        return iPage;
+    }
+
 
 }

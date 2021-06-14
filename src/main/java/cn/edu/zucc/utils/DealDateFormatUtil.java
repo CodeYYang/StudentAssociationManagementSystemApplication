@@ -27,7 +27,7 @@ public class DealDateFormatUtil {
     }
 
     public static Long dealDateToLong(String oldDateStr) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
             date = df.parse(oldDateStr);

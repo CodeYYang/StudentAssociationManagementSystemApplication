@@ -156,10 +156,12 @@ public class UserController {
         queryWrapper.eq("user_id",userId);
         UserAssociation one = userAssociationService.getOne(queryWrapper);
         if( one != null){
-            if(one.getUserAssStatus().equals("待审核")||one.getUserAssStatus().equals("审核中"))
-                return Result.error().data("提示","您已提交加入社团申请，等待审核中");
-            else
-                return Result.error().data("提示","您已是该社团成员，请勿重复申请");
+            if(one.getUserAssStatus().equals("待审核")||one.getUserAssStatus().equals("审核中")) {
+                return Result.error().data("提示", "您已提交加入社团申请，等待审核中");
+            }
+            else {
+                return Result.error().data("提示", "您已是该社团成员，请勿重复申请");
+            }
         }
         userAssociationService.save(userAssociation);
         //Association associationServiceById = associationService.getById(assId);
@@ -188,10 +190,12 @@ public class UserController {
         queryWrapper.eq("user_id",userId);
         UserActivity one = userActivityService.getOne(queryWrapper);
         if( one != null){
-            if(one.getUserActivityStatus().equals("待审核")||one.getUserActivityStatus().equals("审核中"))
-                return Result.error().data("提示","您已提交加入活动申请，等待审核中");
-            else
-                return Result.error().data("提示","您已加入该活动，请勿重复申请");
+            if(one.getUserActivityStatus().equals("待审核")||one.getUserActivityStatus().equals("审核中")) {
+                return Result.error().data("提示", "您已提交加入活动申请，等待审核中");
+            }
+            else {
+                return Result.error().data("提示", "您已加入该活动，请勿重复申请");
+            }
         }
         Activity activity = activityService.getById(activityId);
         if(activity.getActivityPeople() == 0){

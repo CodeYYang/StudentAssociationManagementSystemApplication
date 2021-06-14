@@ -7,6 +7,7 @@ import cn.edu.zucc.entity.vo.ActivityAssociationVo;
 import cn.edu.zucc.entity.vo.AssociationExt;
 import cn.edu.zucc.response.Result;
 import cn.edu.zucc.service.ActivityService;
+import cn.edu.zucc.utils.DealDateFormatUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -59,12 +60,12 @@ public class ActivityController {
                               @RequestParam("activityLeave") boolean activityLeave,
                               @RequestParam("activityPeople")  Integer activityPeople,
                               @RequestParam("activityCredit") Integer activityCredit,
-                              @RequestParam("activityScore") Integer activityScore,
-                              @RequestParam("activitySignBeginTime") Date activitySignBeginTime,
-                              @RequestParam("activitySignEndTime") Date activitySignEndTime,
-                              @RequestParam("activityBeginTime") Date activityBeginTime,
-                              @RequestParam("activityEndTime") Date activityEndTime)
+                              @RequestParam("activitySignBeginTime") String activitySignBeginTime,
+                              @RequestParam("activitySignEndTime") String activitySignEndTime,
+                              @RequestParam("activityBeginTime") String activityBeginTime,
+                              @RequestParam("activityEndTime") String activityEndTime)
                               {
+        System.out.println(activityBeginTime);
         Activity activity = new Activity();
         activity.setAssId(Long.valueOf(assId));
         activity.setActivityName(activityName);
@@ -74,12 +75,11 @@ public class ActivityController {
         activity.setActivityStatus("审批中");
         activity.setActivityPeople(activityPeople);
         activity.setActivityCredit(new BigDecimal(activityCredit));
-        activity.setActivityScore(new BigDecimal(activityScore));
         activity.setActivityCreateTime(new Date());
-        activity.setActivitySignBeginTime(activitySignBeginTime);
-        activity.setActivitySignEndTime(activitySignEndTime);
-        activity.setActivityBeginTime(activityBeginTime);
-        activity.setActivityEndTime(activityEndTime);
+        activity.setActivitySignBeginTime(new Date(DealDateFormatUtil.dealDateToLong(activitySignBeginTime)));
+        activity.setActivitySignEndTime(new Date(DealDateFormatUtil.dealDateToLong(activitySignEndTime)));
+        activity.setActivityBeginTime(new Date(DealDateFormatUtil.dealDateToLong(activityBeginTime)));
+        activity.setActivityEndTime(new Date(DealDateFormatUtil.dealDateToLong(activityEndTime)));
         if(activityService.findActivityByName(activityName) != null)
         {
             return Result.error().data("提示","活动已存在");

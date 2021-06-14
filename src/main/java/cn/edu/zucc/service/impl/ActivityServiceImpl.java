@@ -44,6 +44,7 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
      * @param query
      * @return
      */
+    @Override
     public Page<ActivityAssociationVo> GetAllActivity(Integer current, Integer size, String query) {
         Page<ActivityAssociationVo> page = new Page<>(current,size);
         List<ActivityAssociationVo> list = activityMapper.GetAllActivity(page,query);

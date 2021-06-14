@@ -37,7 +37,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 根据电话查询用户
      * @param phone
-     * @return
+     * @return User
      */
     @Override
     public User getUserByPhone(String phone) {

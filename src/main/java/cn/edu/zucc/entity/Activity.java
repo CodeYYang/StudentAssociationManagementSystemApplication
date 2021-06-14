@@ -61,18 +61,23 @@ public class Activity implements Serializable {
     @TableField("activity_score")
     private BigDecimal activityScore;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
     @TableField("activity_create_time")
     private Date activityCreateTime;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
     @TableField("activity_sign_begin_time")
     private Date activitySignBeginTime;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
     @TableField("activity_sign_end_time")
     private Date activitySignEndTime;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
     @TableField("activity_begin_time")
     private Date activityBeginTime;
 
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
     @TableField("activity_end_time")
     private Date activityEndTime;
 

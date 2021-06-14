@@ -63,32 +63,23 @@ public class Activity implements Serializable {
 
 
     @TableField("activity_create_time")
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activityCreateTime;
 
 
     @TableField("activity_sign_begin_time")
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+
     private Date activitySignBeginTime;
 
 
     @TableField("activity_sign_end_time")
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activitySignEndTime;
 
 
     @TableField("activity_begin_time")
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activityBeginTime;
 
 
     @TableField("activity_end_time")
-    @DateTimeFormat(pattern ="yyyy-MM-dd HH-mm-ss")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date activityEndTime;
 
 

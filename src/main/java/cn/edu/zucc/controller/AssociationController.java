@@ -60,7 +60,7 @@ public class AssociationController {
         association.setAssName(assName);
         association.setAssTotal(0);
         association.setAssCreateTime(new Date());
-        association.setAssStatus("待审核");
+        association.setAssStatus("审核通过");
         if(associationService.getAssociationByName(assName) == null) {
             associationService.save(association);
             return Result.ok().data("association",association);

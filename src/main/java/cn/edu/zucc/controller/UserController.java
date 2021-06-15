@@ -75,15 +75,16 @@ public class UserController {
             QueryWrapper queryWrapper = new QueryWrapper();
             queryWrapper.eq("user_id",user.getUserId());
             queryWrapper.eq("user_ass_role","社长");
-            UserAssociation userAssociation = userAssociationService.getOne(queryWrapper);
-            if(userAssociation != null){
+            List<UserAssociation> userAssociation = userAssociationService.list(queryWrapper);
+            System.out.println(userAssociation == null);
+            if(userAssociation.size() != 0){
                 s = "社长";
             }
             QueryWrapper queryWrapper1 = new QueryWrapper();
             queryWrapper1.eq("user_id",user.getUserId());
             queryWrapper1.eq("user_ass_role","社员");
-            UserAssociation userAssociation1 = userAssociationService.getOne(queryWrapper1);
-            if (userAssociation1 != null){
+            List list = userAssociationService.list(queryWrapper1);
+            if (list.size()!=0 && userAssociation.size() == 0){
                 s = "社员";
             }
             if(s.equals("")){

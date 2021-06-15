@@ -124,6 +124,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
+     * 查看指定社团审核未通过的社团成员
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
+    @Override
+    public IPage<User> searchAssMemberNotStatus(Integer current, Integer size, String query, String assId) {
+        Page<User> page = new Page<>(current,size);
+        IPage<User> iPage = this.baseMapper.searchAssMemberNotStatus(page,assId,query);
+        return iPage;
+    }
+
+    /**
      * 查看我管理的活动成员
      * @param current
      * @param size

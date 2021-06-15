@@ -79,6 +79,16 @@ public interface UserService extends IService<User> {
      */
     IPage<User> searchAssMemberWaitStatus(Integer current, Integer size, String query, String assId);
 
+    /**
+     * 查看指定社团审核未通过的社团成员
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
+    IPage<User> searchAssMemberNotStatus(Integer current, Integer size, String query, String assId);
+
 
     /**
      * 查看我管理的活动成员

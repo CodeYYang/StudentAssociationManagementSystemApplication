@@ -74,6 +74,7 @@ public class ActivityController {
         activity.setActivityType(activityType);
         activity.setActivityLeave(activityLeave);
         activity.setActivityStatus("审批中");
+
         activity.setActivityPeople(activityPeople);
         activity.setActivityCredit(new BigDecimal(activityCredit));
         activity.setActivityCreateTime(activitySignBeginTime);
@@ -146,7 +147,8 @@ public class ActivityController {
 
         //转换日期
         DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));// CustomDateEditor为自定义日期编辑器
+        // CustomDateEditor为自定义日期编辑器
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 }
 

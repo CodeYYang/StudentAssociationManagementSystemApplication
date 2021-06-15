@@ -2,12 +2,14 @@ package cn.edu.zucc.controller;
 
 
 import cn.edu.zucc.entity.Association;
+import cn.edu.zucc.entity.User;
 import cn.edu.zucc.entity.UserActivity;
 import cn.edu.zucc.entity.UserAssociation;
 import cn.edu.zucc.entity.vo.AssociationExt;
 import cn.edu.zucc.response.Result;
 import cn.edu.zucc.service.AssociationService;
 import cn.edu.zucc.service.UserAssociationService;
+import cn.edu.zucc.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -40,6 +42,8 @@ public class AssociationController {
     private AssociationService associationService;
     @Resource
     private UserAssociationService userAssociationService;
+    @Resource
+    private UserService userService;
 
     /**
      * 添加社团
@@ -50,20 +54,15 @@ public class AssociationController {
     @GetMapping("/add")
     @ApiOperation(value = "添加社团",notes = "添加社团")
     public Result addAssociation(@RequestParam("assName")String assName,
-                                 @RequestParam("assBrief") String assBrief,
-                                 @RequestParam("userId") String userId){
+                                 @RequestParam("assBrief") String assBrief){
         Association association = new Association();
         association.setAssBrief(assBrief);
         association.setAssName(assName);
-        association.setAssTotal(1);
+        association.setAssTotal(0);
         association.setAssCreateTime(new Date());
         association.setAssStatus("待审核");
         if(associationService.getAssociationByName(assName) == null) {
             associationService.save(association);
-            Association associationByName = associationService.getAssociationByName(assName);
-            Long assId = associationByName.getAssId();
-            userAssociationService.addUserAssociation(String.valueOf(assId),userId);
-            userAssociationService.ModifyPresident(String.valueOf(assId),String.valueOf(userId),"社长");
             return Result.ok().data("association",association);
         }else{
             return Result.error().data("提示","该社团名称已存在");
@@ -124,7 +123,6 @@ public class AssociationController {
             return Result.error().data("提示","该社团不存在该成员");
         }
         UserAssociation president = userAssociationService.getPresident(assId);
-        UserActivity userActivity = new UserActivity();
         if (president == null){
             userAssociationService.ModifyPresident(assId,userId,"社长");
             return Result.ok().data("提示","已修改为社长");
@@ -171,12 +169,29 @@ public class AssociationController {
         }
 
     }
+    @GetMapping("/searchPresident")
+    @ApiOperation(value = "查找社长",notes = "查看社长")
+    public Result searchPresident(@RequestParam("assId") String assId)
+    {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("ass_id",assId);
+        queryWrapper.eq("user_ass_role","社长");
+        UserAssociation userAssociation = userAssociationService.getOne(queryWrapper);
+        if(userAssociation == null)
+        {
+            return Result.error().data("提示","该社团不存在社长");
+        }else{
+            User user = userService.getById(userAssociation.getUserId());
+            return Result.ok().data("President",user);
+        }
+    }
     @InitBinder
     public void initBinder(WebDataBinder binder, WebRequest request) {
 
         //转换日期
         DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));// CustomDateEditor为自定义日期编辑器
+        // CustomDateEditor为自定义日期编辑器
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 }
 

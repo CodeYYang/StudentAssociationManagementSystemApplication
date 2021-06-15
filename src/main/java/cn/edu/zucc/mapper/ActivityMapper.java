@@ -25,4 +25,5 @@ public interface ActivityMapper extends BaseMapper<Activity> {
      * @return
      */
     List<ActivityAssociationVo>  GetAllActivity(Page<ActivityAssociationVo> page, String query);
+
 }

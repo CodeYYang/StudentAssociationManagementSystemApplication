@@ -47,6 +47,7 @@
         from user a,user_association b
         where a.user_id = b.user_id AND b.ass_id = #{assId}
         AND user_name like "%"#{query}"%" and user_ass_role != '社长'
+        AND user_ass_status = '审核通过'
     </select>
     <!--
     查看固定社团待审核的社团成员
@@ -57,6 +58,17 @@
         from user a,user_association b
         where a.user_id = b.user_id AND b.ass_id = #{assId}
         AND user_name like "%"#{query}"%" and user_ass_status = '待审核'
+    </select>
+
+    <!--
+    查看固定社团待审核的社团成员
+    -->
+    <select id="searchAssMemberNotStatus" resultType="cn.edu.zucc.entity.User">
+        select a.user_id,user_name,user_pwd,user_phone,
+        user_credit,user_role,user_create_time
+        from user a,user_association b
+        where a.user_id = b.user_id AND b.ass_id = #{assId}
+        AND user_name like "%"#{query}"%" and user_ass_status = '审核未通过'
     </select>
 
     <!--

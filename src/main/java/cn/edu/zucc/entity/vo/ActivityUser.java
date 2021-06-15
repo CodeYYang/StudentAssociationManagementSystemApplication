@@ -4,6 +4,9 @@ import cn.edu.zucc.entity.Activity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+/**
+ * @author WYK
+ */
 @Data
 public class ActivityUser extends Activity {
 

@@ -61,7 +61,7 @@
     </select>
 
     <!--
-    查看固定社团待审核的社团成员
+    查看固定社团审核未通过的社团成员
     -->
     <select id="searchAssMemberNotStatus" resultType="cn.edu.zucc.entity.User">
         select a.user_id,user_name,user_pwd,user_phone,

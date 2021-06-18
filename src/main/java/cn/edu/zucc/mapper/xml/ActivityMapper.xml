@@ -11,4 +11,18 @@
         from activity,association
         where activity_name like "%"#{query}"%" and activity.ass_id = association.ass_id and activity_status = '审核通过'
     </select>
+
+
+    <!--
+    查看固定社团审核未通过的活动成员
+    -->
+    <select id="searchActivityMemberNotStatus" resultType="cn.edu.zucc.entity.User">
+        select a.user_id,user_name,user_pwd,user_phone,
+        user_credit,user_role,user_create_time
+        from user a,user_activity b
+        where a.user_id = b.user_id AND b.activity_id = #{activityId}
+        AND user_name like "%"#{query}"%" and user_activity_status = '审核未通过'
+    </select>
+
+
 </mapper>

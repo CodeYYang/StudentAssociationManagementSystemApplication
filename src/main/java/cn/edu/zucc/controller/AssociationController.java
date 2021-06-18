@@ -3,7 +3,6 @@ package cn.edu.zucc.controller;
 
 import cn.edu.zucc.entity.Association;
 import cn.edu.zucc.entity.User;
-import cn.edu.zucc.entity.UserActivity;
 import cn.edu.zucc.entity.UserAssociation;
 import cn.edu.zucc.entity.vo.AssociationExt;
 import cn.edu.zucc.response.Result;
@@ -182,7 +181,7 @@ public class AssociationController {
             return Result.error().data("提示","该社团不存在社长");
         }else{
             User user = userService.getById(userAssociation.getUserId());
-            return Result.ok().data("President",user);
+            return Result.ok().data("user",user);
         }
     }
     @InitBinder

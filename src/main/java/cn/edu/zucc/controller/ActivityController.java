@@ -2,13 +2,12 @@ package cn.edu.zucc.controller;
 
 
 import cn.edu.zucc.entity.Activity;
-import cn.edu.zucc.entity.Association;
+import cn.edu.zucc.entity.User;
 import cn.edu.zucc.entity.vo.ActivityAssociationVo;
-import cn.edu.zucc.entity.vo.AssociationExt;
 import cn.edu.zucc.response.Result;
 import cn.edu.zucc.service.ActivityService;
-import cn.edu.zucc.utils.DealDateFormatUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -73,7 +72,7 @@ public class ActivityController {
         activity.setActivityBrief(activityBrief);
         activity.setActivityType(activityType);
         activity.setActivityLeave(activityLeave);
-        activity.setActivityStatus("审批中");
+        activity.setActivityStatus("待审核");
 
         activity.setActivityPeople(activityPeople);
         activity.setActivityCredit(new BigDecimal(activityCredit));
@@ -142,6 +141,138 @@ public class ActivityController {
         return Result.ok().data("total",total).data("records",records);
     }
 
+
+    /**
+     * 查看审核未通过的活动成员
+     *
+     * @param current
+     * @param size
+     * @param query
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/searchActivityMemberNotStatue")
+    @ApiOperation(value = "查看审核未通过的活动成员", notes = "查看审核未通过的社团成员")
+    public Result searchActivityMemberNotStatue(@RequestParam(required = true, defaultValue = "1") Integer current,
+                                                @RequestParam(required = true, defaultValue = "8") Integer size,
+                                                @RequestParam(required = true, defaultValue = "") String query,
+                                                @RequestParam("activityId") String activityId) {
+
+        IPage<User> iPage = activityService.searchActivityMemberNotStatus(current, size, query, activityId);
+        long total = iPage.getTotal();
+        List<User> records = iPage.getRecords();
+        if (total == 0) {
+            return Result.error().data("提示", "该活动不存在审核未通过成员");
+        } else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+
+    /**
+     * 管理员审核活动通过
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/passActivityStatus")
+    @ApiOperation(value = "管理员审核活动通过",notes = "管理员审核活动通过")
+    public Result passActivityStatus(@RequestParam("activityId") String activityId)
+    {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("activity_id",activityId);
+        Activity activity = activityService.getOne(queryWrapper);
+        if(activity == null){
+            return Result.error().data("提示","活动不存在");
+        }else{
+            if (activity.getActivityStatus().equals("审核未通过") || activity.getActivityStatus().equals("审核通过")){
+                return Result.error().data("提示","该活动已经过管理员审核");
+            }else {
+                activity.setActivityStatus("审核通过");
+                activityService.saveOrUpdate(activity);
+                return Result.ok().data("提示","审核完成");
+            }
+        }
+    }
+    /**
+     * 管理员审核活动未通过
+     * @param activityId
+     * @return
+     */
+    @GetMapping("/disPassActivityStatus")
+    @ApiOperation(value = "管理员审核活动未通过",notes = "管理员审核活动未通过")
+    public Result disPassActivityStatus(@RequestParam("activityId") String activityId)
+    {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("activity_id",activityId);
+        Activity activity = activityService.getOne(queryWrapper);
+        if(activity == null){
+            return Result.error().data("提示","活动不存在");
+        }else{
+            if (activity.getActivityStatus().equals("审核未通过") || activity.getActivityStatus().equals("审核通过")){
+                return Result.error().data("提示","该活动已经过管理员审核");
+            }else {
+                activity.setActivityStatus("审核未通过");
+                activityService.saveOrUpdate(activity);
+                return Result.ok().data("提示","审核完成");
+            }
+        }
+    }
+
+    /**
+     * 查看待审核的活动
+     *
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
+    @GetMapping("/searchActivityWaitStatue")
+    @ApiOperation(value = "查看待审核的活动", notes = "查看待审核的活动")
+    public Result searchAssMemberWaitStatue(@RequestParam(required = true, defaultValue = "1") Integer current,
+                                            @RequestParam(required = true, defaultValue = "8") Integer size,
+                                            @RequestParam(required = true, defaultValue = "") String query) {
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("activity_status","待审核");
+        queryWrapper.eq("activity_name",query);
+        Page<Activity> activityPage = new Page<>(current,size);
+        IPage<Activity> activityIPage = activityService.page(activityPage,queryWrapper);
+        long total = activityIPage.getTotal();
+        List<Activity> records = activityIPage.getRecords();
+        if (total == 0) {
+            return Result.error().data("提示", "该不存在待审核的活动");
+        } else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
+    /**
+     * 查看审核未通过的活动
+     *
+     * @param current
+     * @param size
+     * @param query
+     * @param assId
+     * @return
+     */
+    @GetMapping("/searchActivityNoyPassStatue")
+    @ApiOperation(value = "查看审核未通过的活动", notes = "查看审核未通过的活动")
+    public Result searchActivityNoyPassStatue(@RequestParam(required = true, defaultValue = "1") Integer current,
+                                            @RequestParam(required = true, defaultValue = "8") Integer size,
+                                            @RequestParam(required = true, defaultValue = "") String query) {
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("activity_status","审核未通过");
+        queryWrapper.eq("activity_name",query);
+        Page<Activity> activityPage = new Page<>(current,size);
+        IPage<Activity> activityIPage = activityService.page(activityPage,queryWrapper);
+        long total = activityIPage.getTotal();
+        List<Activity> records = activityIPage.getRecords();
+        if (total == 0) {
+            return Result.error().data("提示", "该不存在审核未通过的活动");
+        } else {
+            return Result.ok().data("total", total).data("records", records);
+        }
+    }
     @InitBinder
     public void initBinder(WebDataBinder binder, WebRequest request) {
 

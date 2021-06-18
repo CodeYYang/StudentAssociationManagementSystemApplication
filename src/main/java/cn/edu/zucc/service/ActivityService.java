@@ -1,7 +1,9 @@
 package cn.edu.zucc.service;
 
 import cn.edu.zucc.entity.Activity;
+import cn.edu.zucc.entity.User;
 import cn.edu.zucc.entity.vo.ActivityAssociationVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -32,4 +34,14 @@ public interface ActivityService extends IService<Activity> {
      * @return
      */
     Page<ActivityAssociationVo> GetAllActivity(Integer current, Integer size, String query);
+
+    /**
+     * 查看指定活动未审核的成员
+     * @param current
+     * @param size
+     * @param query
+     * @param activityId
+     * @return
+     */
+    IPage<User> searchActivityMemberNotStatus(Integer current, Integer size, String query, String activityId);
 }

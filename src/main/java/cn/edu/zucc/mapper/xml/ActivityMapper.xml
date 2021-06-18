@@ -5,7 +5,7 @@
     <!--模糊查询所有活动，并且显示社团名称
     -->
     <select id="GetAllActivity" resultType="cn.edu.zucc.entity.vo.ActivityAssociationVo">
-        select association.ass_name,activity_id,activity.ass_id,activity_name,activity_brief,activity_type,
+        select association.ass_name,DISTINCT(activity_id),activity.ass_id,activity_name,activity_brief,activity_type,
         activity_leave,activity_status,activity_people,activity_credit,activity_score,
         activity_create_time,activity_sign_begin_time,activity_sign_end_time,activity_begin_time,activity_end_time
         from activity,association
@@ -17,7 +17,7 @@
     查看固定社团审核未通过的活动成员
     -->
     <select id="searchActivityMemberNotStatus" resultType="cn.edu.zucc.entity.User">
-        select a.user_id,user_name,user_pwd,user_phone,
+        select DISTINCT(a.user_id),user_name,user_pwd,user_phone,
         user_credit,user_role,user_create_time
         from user a,user_activity b
         where a.user_id = b.user_id AND b.activity_id = #{activityId}

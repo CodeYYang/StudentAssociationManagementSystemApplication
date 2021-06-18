@@ -223,7 +223,6 @@ public class ActivityController {
      * @param current
      * @param size
      * @param query
-     * @param assId
      * @return
      */
     @GetMapping("/searchActivityWaitStatue")
@@ -251,7 +250,6 @@ public class ActivityController {
      * @param current
      * @param size
      * @param query
-     * @param assId
      * @return
      */
     @GetMapping("/searchActivityNoyPassStatue")

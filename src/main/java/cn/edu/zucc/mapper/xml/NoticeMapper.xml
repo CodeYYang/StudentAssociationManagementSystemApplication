@@ -12,5 +12,4 @@
         where notice.ass_id = association.ass_id and notice.ass_id = #{assId}
     </select>
 
-
 </mapper>

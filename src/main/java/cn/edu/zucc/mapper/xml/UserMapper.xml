@@ -6,7 +6,7 @@
     查看用户加入逇社团信息
     -->
     <select id="searchMyAssociation" resultType="cn.edu.zucc.entity.vo.AssociationUser">
-        select a.ass_id,ass_name,ass_brief,ass_total,
+        select DISTINCT(a.ass_id),ass_name,ass_brief,ass_total,
         ass_status,ass_create_time,
         user_ass_role,user_ass_status
         from association a,user_association b,user
@@ -19,7 +19,7 @@
     查看用户加入的活动信息
     -->
     <select id="searchMyActivity" resultType="cn.edu.zucc.entity.vo.ActivityUser">
-        select b.activity_id,b.activity_name,b.activity_brief,b.activity_type,
+        select DISTINCT(b.activity_id),b.activity_name,b.activity_brief,b.activity_type,
         activity_leave,activity_status,activity_people,activity_credit,	activity_score,
         activity_create_time,activity_sign_begin_time,activity_sign_end_time,activity_begin_time,
         activity_end_time,b.ass_id,c.ass_name,user_activity_status
@@ -32,7 +32,7 @@
     查看我管理的社团
     -->
     <select id="searchManagementAssociation" resultType="cn.edu.zucc.entity.Association">
-        select a.ass_id,ass_name,ass_brief,ass_total,ass_status,ass_create_time
+        select DISTINCT(a.ass_id),ass_name,ass_brief,ass_total,ass_status,ass_create_time
         from association a,user_association b
         where a.ass_id = b.ass_id AND b.user_id = #{userId}
         AND b.user_ass_role = '社长' And a.ass_name like "%"#{query}"%"
@@ -42,7 +42,7 @@
     查看我管理的社团成员
     -->
     <select id="searchManagementAssociationMember" resultType="cn.edu.zucc.entity.User">
-        select a.user_id,user_name,user_pwd,user_phone,
+        select DISTINCT(a.user_id),user_name,user_pwd,user_phone,
         user_credit,user_role,user_create_time
         from user a,user_association b
         where a.user_id = b.user_id AND b.ass_id = #{assId}
@@ -53,7 +53,7 @@
     查看固定社团待审核的社团成员
     -->
     <select id="searchAssMemberWaitStatus" resultType="cn.edu.zucc.entity.User">
-        select a.user_id,user_name,user_pwd,user_phone,
+        select DISTINCT(a.user_id),user_name,user_pwd,user_phone,
         user_credit,user_role,user_create_time
         from user a,user_association b
         where a.user_id = b.user_id AND b.ass_id = #{assId}
@@ -64,7 +64,7 @@
     查看固定社团审核未通过的社团成员
     -->
     <select id="searchAssMemberNotStatus" resultType="cn.edu.zucc.entity.User">
-        select a.user_id,user_name,user_pwd,user_phone,
+        select DISTINCT(a.user_id),user_name,user_pwd,user_phone,
         user_credit,user_role,user_create_time
         from user a,user_association b
         where a.user_id = b.user_id AND b.ass_id = #{assId}
@@ -75,7 +75,7 @@
     查看我管理的活动成员
     -->
     <select id="searchManagementActivityMember" resultType="cn.edu.zucc.entity.User">
-        select a.user_id,user_name,user_pwd,user_phone,
+        select DISTINCT(a.user_id),user_name,user_pwd,user_phone,
         user_credit,user_role,user_create_time
         from user a,user_activity b,user_association c
         where a.user_id = b.user_id AND b.activity_id = #{activityId}
@@ -87,7 +87,7 @@
     查看固定社团待审核的社团成员
     -->
     <select id="searchActivityMemberWaitStatus" resultType="cn.edu.zucc.entity.User">
-        select a.user_id,user_name,user_pwd,user_phone,
+        select DISTINCT(a.user_id),user_name,user_pwd,user_phone,
         user_credit,user_role,user_create_time
         from user a,user_activity b
         where a.user_id = b.user_id AND b.activity_id = #{activityId}

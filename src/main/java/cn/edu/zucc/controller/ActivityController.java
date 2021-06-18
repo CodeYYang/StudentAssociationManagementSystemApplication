@@ -234,7 +234,7 @@ public class ActivityController {
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("activity_status","待审核");
-        queryWrapper.eq("activity_name",query);
+        queryWrapper.like("activity_name",query);
         Page<Activity> activityPage = new Page<>(current,size);
         IPage<Activity> activityIPage = activityService.page(activityPage,queryWrapper);
         long total = activityIPage.getTotal();
@@ -262,7 +262,7 @@ public class ActivityController {
 
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("activity_status","审核未通过");
-        queryWrapper.eq("activity_name",query);
+        queryWrapper.like("activity_name",query);
         Page<Activity> activityPage = new Page<>(current,size);
         IPage<Activity> activityIPage = activityService.page(activityPage,queryWrapper);
         long total = activityIPage.getTotal();
